@@ -21,3 +21,45 @@ double simpson(double (*f)(double), double b, double a, double n)
   return sum3;
 }
     
+double fibonacci(double x)
+{
+  if(n==1||n==2)
+    return 1;
+  
+  else
+    return fibonacci(n-1)+fibonacci(n-2);
+}
+
+long factorial(int x)
+{
+  if(n==0)
+    return 1;
+  
+  else
+    return n*factorial(n-1);
+}
+
+double forward(double (*f)(double), double x, double h)
+{
+  return (f(x+h)-f(x))/h;
+}
+
+double backward(double (*f)(double), double x, double h)
+
+{
+  return (f(x)-f(x-h))/h;
+}
+
+double halfp(double (*f)(double), double x, double h)
+
+{
+  return (f(x+h/2)-f(x-h/2))/h;
+}
+
+double richardson(double x, double h)
+{
+  return (4*halfp(x, h/2)-halfp(x, h))/3;
+}
+
+
+
