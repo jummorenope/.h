@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cmath>
 
-\ integrales \
-
 double simpson(double (*f)(double), double b, double a, double n)
 {
   double sum1=0, sum2=0, sum3=0, c;
@@ -23,27 +21,23 @@ double simpson(double (*f)(double), double b, double a, double n)
   return sum3;
 }
 
-\otras\
-
-double fibonacci(double x)
+long fibonacci(int x)
 {
-  if(n==1||n==2)
+  if(x==1||x==2)
     return 1;
   
   else
-    return fibonacci(n-1)+fibonacci(n-2);
+    return fibonacci(x-1)+fibonacci(x-2);
 }
 
 long factorial(int x)
 {
-  if(n==0)
+  if(x==0)
     return 1;
   
   else
-    return n*factorial(n-1);
+    return x*factorial(x-1);
 }
-
-\derivadas\
 
 double forward(double (*f)(double), double x, double h)
 {
@@ -62,12 +56,10 @@ double central(double (*f)(double), double x, double h)
   return (f(x+h/2)-f(x-h/2))/h;
 }
 
-double richardson(double x, double h)
+double richardson(double (*f)(double), double x, double h)
 {
-  return (4*central(x, h/2)-central(x, h))/3;
+  return (4*central(f, x, h/2)-central(f, x, h))/3;
 }
-
-\raices\
 
 double fixed_point(double (*f)(double), double (*g)(double), double x, int MAX, double eps)
 {
