@@ -132,19 +132,10 @@ void print(double ma[], int m, int n)
 	}
       std::cout<<std::endl;
     }
+  std::cout<<std::endl;
 }
 
-double multiply(double m1[], double m2[], int ii, int jj, int N, int M)
-{
-  double ij=0;
-  for (int i=0; i<N; i++)
-    {
-      ij=ij+m1[ii*N+i]*m2[i*M+jj];
-    }
-  return ij;
-}
-
-int ortogonal(double m1[], int m, int n, double eps)
+void ortogonal(double m1[], int m, int n, double eps)
 {
   int c=1;
   for (int ii=0; ii<m; ii++)
@@ -170,7 +161,11 @@ int ortogonal(double m1[], int m, int n, double eps)
             }
 	}
     }
-  return c;
+  if(c==1)
+    std::cout<<"Es ortogonal"<<std::endl;
+  if(c==0)
+    std::cout<<"No es ortogonal"<<std::endl;
+  
 }
 
 double media(double a[], int n)
@@ -218,5 +213,39 @@ double minimo(double a[], int n)
         minimo=a[ii];
     }
   return minimo;
+}
+
+void transpond(double m1[], double m2[], int m , int n)
+{
+  for(int ii=0; ii<m; ii++)
+    {
+      for( int jj=0; jj<n; jj++)
+	{
+          m2[ii*n+jj]=m1[jj*m+ii];
+
+	}
+    }
+
+}
+
+void multiply(double m1[], double m2[], double m3[], int m, int n	\
+)
+{
+  double ij=0;
+  for (int ii=0; ii<m; ii++)
+    {
+      for (int jj=0; jj<m; jj++)
+        {
+          {
+            ij=0;
+            for (int i=0; i<n; i++)
+              {
+                ij=ij+m1[ii*n+i]*m2[i*m+jj];
+              }
+          }
+
+          m3[ii*m+jj]=ij;
+        }
+      }
 }
 
