@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cmath>
 
+//Integrales
+
 double simpson(double (*f)(double), double b, double a, double n)
 {
   double sum1=0, sum2=0, sum3=0, c;
@@ -21,6 +23,8 @@ double simpson(double (*f)(double), double b, double a, double n)
   return sum3;
 }
 
+//Funciones varias
+
 long fibonacci(int x)
 {
   if(x==1||x==2)
@@ -38,6 +42,20 @@ long factorial(int x)
   else
     return x*factorial(x-1);
 }
+
+int primo(long int x)
+{
+  int c=1;
+  double d=sqrt(x);
+  for(int ii=2; ii<=d; ii++)
+    {
+      if(x%ii==0)
+	c=0;
+    }
+  return c;
+}
+
+//Derivadas
 
 double forward(double (*f)(double), double x, double h)
 {
@@ -60,6 +78,8 @@ double richardson(double (*f)(double), double x, double h)
 {
   return (4*central(f, x, h/2)-central(f, x, h))/3;
 }
+
+//Raices
 
 double fixed_point(double (*f)(double), double (*g)(double), double x, int MAX, double eps)
 {
@@ -110,17 +130,7 @@ double newton(double (*f)(double), double (*fp)(double), double po,int MAX,doubl
   return p;
 }
 
-int primo(long int x)
-{
-  int c=1;
-  double d=sqrt(x);
-  for(int ii=2; ii<=d; ii++)
-    {
-      if(x%ii==0)
-	c=0;
-    }
-  return c;
-}
+//Matrices y arreglos
 
 void print(double ma[], int m, int n)
 {
@@ -249,3 +259,57 @@ void multiply(double m1[], double m2[], double m3[], int m, int n	\
       }
 }
 
+
+double determinant (double m1[], int m)
+{
+  double determinante=0;
+  double m2[m-1];
+  
+  if(m==2)
+    {
+      determinante=m1[0]*m1[3]-m1[1]*m1[2];
+    }
+  
+  else
+    {
+      for(int jj=0; jj<m; jj++)
+	{
+	  for (int i=0; i<m-1; i++)
+	    {
+	      for (int j=0; j<m-1; j++)
+		{
+		  if(j<jj)
+		    m2[i*(m-1)+j]=m1[(i+1)*m+j];
+		  
+		  else
+		    m2[i*(m-1)+j]=m1[(i+1)*m+j+1];		    
+		}
+	    }
+	  determinante=determinante+std::pow(-1,jj)*m1[jj]*determinant(m2,m-1);
+	}
+    }
+  
+  return determinante;
+}
+
+
+void inverse (double m1[], double m2[], int m)
+{
+  transpond(m1, m2, m, m);
+  double determinante=determinant(m1, m);
+  double k=1/determinante;
+  if (determinante!=0)
+    {
+      for(int ii=0; ii<m; ii++)
+        {
+          for(int jj=0; jj<m; jj++)
+            {
+              m2[ii*m+jj]=m2[ii*m+jj]*k;
+            }
+        }
+    }
+
+  else
+    std::cout<<"La matriz no tiene inversa"<<std::endl;
+
+}
