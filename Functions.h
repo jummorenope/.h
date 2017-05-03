@@ -1,26 +1,65 @@
 #include <iostream>
 #include <cmath>
-
+#include <vector>
 //Integrales
 
-double simpson(double (*f)(double), double b, double a, double n)
+double simpson(const double a, const double b, int n, double (*f)(double))
 {
-  double sum1=0, sum2=0, sum3=0, c;
-  c=b-a;
-
-  for (int ii=1; ii<(n/2-1); ii++)
+  if (n%2==1)
     {
-      sum1=sum1+2*f(a+c*(2*ii)/n);
+      n=n+1;
+    }
+  
+  double sum1=0, sum2=0, sum3=0, h;
+  h=(b-a)/n;
+
+  for (int ii=1; ii<=(n/2-1); ii++)
+    {
+      sum1=sum1+f(a+h*(2*ii));
     }
 
-  for (int ii=1; ii<(n/2); ii++)
+  for (int ii=1; ii<=(n/2); ii++)
     {
-      sum2=sum2+4*f(a+c*(2*ii-1)/n);
+      sum2=sum2+f(a+h*(2*ii-1));
     }
 
-  sum3=(sum1+sum2+f(a)+f(b))*(c/(3.0*n));
+  sum3=(2*sum1+4*sum2+f(a)+f(b))*(h/(3.0));
 
   return sum3;
+}
+
+double trapezoid_irregular(const std::vector<double>&x,const std::vector<double>&fx)
+{
+  double sum=0.0;
+  const int n=x.size();
+  for(int ii=0; ii<n-1; ii++)
+    {
+      sum += (x[ii+1]-x[ii])*(fx[ii]+fx[ii+1]);
+    }
+  sum*=0.5;
+  return sum;
+}
+
+double trapezoid_regular(const double a, const double b, const int n, double (*f)(double))
+{
+  double sum=0.5*(f(a)+f(b));
+  const double h=(b-a)/n;
+  for(int ii=1; ii<n; ii++)
+    {
+      sum +=f(a+ii*h);
+    }
+  sum *= h;
+  return sum;
+}
+
+double richardson_trapezoid(const double a, const double b, const int n, double (*f)(double))
+{
+  return (4*trapezoid_regular(a,b,2*n,f)-trapezoid_regular(a,b,n,f))/3;
+}
+
+double richardson_simpson(const double a, const double b, const int n, double (*f)(double))
+{
+  return (16*simpson(a,b,2*n,f)-simpson(a,b,n,f))/15;
 }
 
 //Funciones varias
@@ -263,7 +302,7 @@ void multiply(double m1[], double m2[], double m3[], int m, int n	\
 double determinant (double m1[], int m)
 {
   double determinante=0;
-  double m2[m-1];
+  double m2[(m-1)*(m-1)];
   
   if(m==2)
     {
@@ -282,7 +321,7 @@ double determinant (double m1[], int m)
 		    m2[i*(m-1)+j]=m1[(i+1)*m+j];
 		  
 		  else
-		    m2[i*(m-1)+j]=m1[(i+1)*m+j+1];		    
+		    m2[i*(m-1)+j]=m1[(i+1)*m+(j+1)];		    
 		}
 	    }
 	  determinante=determinante+std::pow(-1,jj)*m1[jj]*determinant(m2,m-1);
@@ -294,8 +333,7 @@ double determinant (double m1[], int m)
 
 
 void inverse (double m1[], double m2[], int m)
-{
-  transpond(m1, m2, m, m);
+{  
   double determinante=determinant(m1, m);
   double k=1/determinante;
   if (determinante!=0)
@@ -313,3 +351,5 @@ void inverse (double m1[], double m2[], int m)
     std::cout<<"La matriz no tiene inversa"<<std::endl;
 
 }
+
+
